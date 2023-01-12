@@ -1,14 +1,18 @@
 # Simple Example
 
 ```terraform
-module "terraform_module_template" {
-  source  = "../../"
+module "internal_stage" {
+  source = "../../"
 
-  example_var = "This is a example value."
+  name     = "my_stage"
+  schema   = "my_schema"
+  database = "my_db"
 }
 ```
 
 ## Usage
+Populate `.env` file with Snowflake credentials and make sure it's sourced to your shell.
+
 ```
 terraform init
 terraform plan -out tfplan

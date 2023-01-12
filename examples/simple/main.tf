@@ -1,5 +1,7 @@
-module "terraform_module_template" {
+module "internal_stage" {
   source = "../../"
 
-  example_var = "This is a example value."
+  name     = "my_stage"
+  schema   = "my_schema"
+  database = "my_db"
 }
