@@ -1,6 +1,9 @@
-# Example output from the module
+output "name" {
+  description = "Name of the stage"
+  value       = one(snowflake_stage.this[*].name)
+}
 
-output "example_output" {
-  description = "Example output of the module"
-  value       = one(null_resource.output_input[*].id)
+output "roles" {
+  description = "This stage access roles"
+  value       = local.roles
 }
