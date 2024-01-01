@@ -1,13 +1,13 @@
 module "snowflake_admin_role" {
   source  = "getindata/role/snowflake"
-  version = "1.0.3"
+  version = "1.2.1"
   context = module.this.context
   name    = "admin"
 }
 
 module "snowflake_dev_role" {
   source  = "getindata/role/snowflake"
-  version = "1.0.3"
+  version = "1.2.1"
   context = module.this.context
   name    = "dev"
 }
