@@ -27,57 +27,82 @@ resource "snowflake_stage" "this" {
   url                 = var.url
 }
 
-module "snowflake_default_role" {
-  for_each = local.default_roles
+# module "snowflake_default_database_role" {
 
-  source  = "getindata/role/snowflake"
-  version = "1.0.3"
+module "snowflake_database_role" {
+  # for_each = local.create_default_roles ? local.default_roles : {}
+  for_each = local.roles
+
+  source = "git::ssh://git@github.com/getindata/terraform-snowflake-database-role.git"
+  # version = "1.0.0"
   context = module.this.context
-  enabled = local.create_default_roles && lookup(each.value, "enabled", true)
-
-  name = each.key
-  attributes = [
-    one(snowflake_stage.this[*].database),
-    one(snowflake_stage.this[*].schema),
-    one(snowflake_stage.this[*].name)
-  ]
-
-  role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
-  granted_to_users     = lookup(each.value, "granted_to_users", [])
-  granted_to_roles     = lookup(each.value, "granted_to_roles", [])
-  granted_roles        = lookup(each.value, "granted_roles", [])
-}
-
-module "snowflake_custom_role" {
-  for_each = local.custom_roles
-
-  source  = "getindata/role/snowflake"
-  version = "1.0.3"
-  context = module.this.context
-  enabled = module.this.enabled && lookup(each.value, "enabled", true)
-
-  name = each.key
-  attributes = [
-    one(snowflake_stage.this[*].database),
-    one(snowflake_stage.this[*].schema),
-    one(snowflake_stage.this[*].name)
-  ]
-
-  role_ownership_grant = lookup(each.value, "role_ownership_grant", "SYSADMIN")
-  granted_to_users     = lookup(each.value, "granted_to_users", [])
-  granted_to_roles     = lookup(each.value, "granted_to_roles", [])
-  granted_roles        = lookup(each.value, "granted_roles", [])
-}
-
-resource "snowflake_stage_grant" "this" {
-  for_each = module.this.enabled ? transpose({ for role_name, role in local.roles : local.roles[role_name].name =>
-    lookup(local.roles_definition[role_name], "stage_grants", [])
-    if lookup(local.roles_definition[role_name], "enabled", true)
-  }) : {}
 
   database_name = one(snowflake_stage.this[*].database)
-  schema_name   = one(snowflake_stage.this[*].schema)
-  stage_name    = one(snowflake_stage.this[*].name)
-  privilege     = each.key
-  roles         = each.value
+  name          = each.key
+
+  parent_database_role   = lookup(each.value, "parent_database_role", null)
+  granted_database_roles = lookup(each.value, "granted_database_roles", [])
+
+  attributes = [
+    one(snowflake_stage.this[*].schema),
+    one(snowflake_stage.this[*].name)
+  ]
+
+  schema_objects_grants = {
+    "STAGE" = [
+      {
+        privileges        = lookup(each.value, "stage_grants", null)
+        all_privileges    = lookup(each.value, "all_privileges", null)
+        with_grant_option = lookup(each.value, "with_grant_option", false)
+        on_future         = lookup(each.value, "on_future", false)
+        on_all            = lookup(each.value, "on_all", false)
+        object_name       = (lookup(each.value, "on_future", false) || lookup(each.value, "on_all", false)) ? null : one(snowflake_stage.this[*].name)
+        schema_name       = one(snowflake_stage.this[*].schema)
+      }
+    ]
+  }
+}
+
+# module "snowflake_custom_database_role" {
+#   for_each = local.custom_roles
+
+#   source = "git::ssh://git@github.com/getindata/terraform-snowflake-database-role.git"
+#   # version = "1.0.0"
+#   context = module.this.context
+
+#   database_name = one(snowflake_stage.this[*].database)
+#   name          = each.key
+
+#   parent_database_role   = lookup(each.value, "parent_database_role", null)
+#   granted_database_roles = lookup(each.value, "granted_database_roles", [])
+
+#   attributes = [
+#     one(snowflake_stage.this[*].schema),
+#     one(snowflake_stage.this[*].name)
+#   ]
+
+#   schema_objects_grants = {
+#     "STAGE" = [
+#       {
+#         privileges        = lookup(each.value, "stage_grants", null)
+#         all_privileges    = lookup(each.value, "all_privileges", null)
+#         with_grant_option = lookup(each.value, "with_grant_option", false)
+#         on_future         = lookup(each.value, "on_future", false)
+#         on_all            = lookup(each.value, "on_all", false)
+#         object_name       = (lookup(each.value, "on_future", false) || lookup(each.value, "on_all", false)) ? null : one(snowflake_stage.this[*].name)
+#         schema_name       = one(snowflake_stage.this[*].schema)
+#       }
+#     ]
+#   }
+# }
+
+resource "snowflake_grant_ownership" "stage_ownership" {
+  count = var.stage_ownership_grant != null ? 1 : 0
+
+  database_role_name = module.snowflake_database_role[var.stage_ownership_grant].fully_qualified_name
+  outbound_privileges = "REVOKE"
+  on {
+    object_type = "STAGE"
+    object_name = local.schema_object_stage_name
+  }
 }
