@@ -20,7 +20,7 @@ terraform apply -var-file=fixtures.tfvars
 ```
 
 ## How to destroy
-If `stage_ownership_grant` was used, first you need to hash out this line, `terraform apply -var-file=fixtures.tfvars` and then:
+If `stage_ownership_grant` was used, first you need to hash out this line, run `terraform apply -var-file=fixtures.tfvars` and then:
 ```shell
 terraform destroy -var-file=fixtures.tfvars
 ```
@@ -88,5 +88,6 @@ terraform destroy -var-file=fixtures.tfvars
 | [snowflake_database_role.db_role_1](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/database_role) | resource |
 | [snowflake_database_role.db_role_2](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/database_role) | resource |
 | [snowflake_database_role.db_role_3](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/database_role) | resource |
+| [snowflake_role.role_1](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/role) | resource |
 | [snowflake_schema.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/schema) | resource |
 <!-- END_TF_DOCS -->

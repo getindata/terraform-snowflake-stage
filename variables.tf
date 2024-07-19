@@ -83,14 +83,15 @@ variable "create_default_databse_roles" {
 variable "roles" {
   description = "Database roles created in the stage scope"
   type = map(object({
-    with_grant_option      = optional(bool)
-    parent_database_role   = optional(string)
-    granted_database_roles = optional(list(string))
-    stage_grants           = optional(list(string))
-    all_privileges         = optional(bool)
-    on_all                 = optional(bool, false)
-    schema_name            = optional(string)
-    on_future              = optional(bool, false)
+    with_grant_option         = optional(bool)
+    granted_to_roles          = optional(list(string))
+    granted_to_database_roles = optional(list(string))
+    granted_database_roles    = optional(list(string))
+    stage_grants              = optional(list(string))
+    all_privileges            = optional(bool)
+    on_all                    = optional(bool, false)
+    schema_name               = optional(string)
+    on_future                 = optional(bool, false)
   }))
   default = {}
 }

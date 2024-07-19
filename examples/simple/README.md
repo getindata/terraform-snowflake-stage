@@ -45,7 +45,9 @@ No inputs.
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.90 |
 
 ## Requirements
 
@@ -56,5 +58,8 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [snowflake_database.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/database) | resource |
+| [snowflake_schema.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/schema) | resource |
 <!-- END_TF_DOCS -->

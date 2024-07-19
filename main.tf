@@ -31,14 +31,15 @@ module "snowflake_database_role" {
   for_each = local.roles
 
   source  = "getindata/database-role/snowflake"
-  version = "1.0.0"
+  version = "1.1.0"
   context = module.this.context
 
   database_name = one(snowflake_stage.this[*].database)
   name          = each.key
 
-  parent_database_role   = lookup(each.value, "parent_database_role", null)
-  granted_database_roles = lookup(each.value, "granted_database_roles", [])
+  granted_to_roles          = lookup(each.value, "granted_to_roles", [])
+  granted_to_database_roles = lookup(each.value, "granted_to_database_roles", [])
+  granted_database_roles    = lookup(each.value, "granted_database_roles", [])
 
   attributes = [
     one(snowflake_stage.this[*].schema),

@@ -1,3 +1,16 @@
+resource "snowflake_database" "this" {
+  name = "USERS_DB"
+}
+
+resource "snowflake_schema" "this" {
+  name     = "TEST_SCHEMA"
+  database = snowflake_database.this.name
+}
+
+resource "snowflake_role" "role_1" {
+  name = "ROLE_1"
+}
+
 resource "snowflake_database_role" "db_role_1" {
   database = snowflake_database.this.name
   name     = "DB_ROLE_1"
@@ -11,15 +24,6 @@ resource "snowflake_database_role" "db_role_2" {
 resource "snowflake_database_role" "db_role_3" {
   database = snowflake_database.this.name
   name     = "DB_ROLE_3"
-}
-
-resource "snowflake_database" "this" {
-  name = "USERS_DB"
-}
-
-resource "snowflake_schema" "this" {
-  name     = "TEST_SCHEMA"
-  database = snowflake_database.this.name
 }
 
 module "internal_stage" {
@@ -36,31 +40,34 @@ module "internal_stage" {
 
   roles = {
     readonly = { # Modifies readonly default role
-      parent_database_role = snowflake_database_role.db_role_1.name
+      granted_to_database_roles = [
+        "${snowflake_database.this.name}.${snowflake_database_role.db_role_1.name}"
+      ]
       granted_database_roles = [
-        snowflake_database_role.db_role_2.name,
-        snowflake_database_role.db_role_3.name
+        "${snowflake_database.this.name}.${snowflake_database_role.db_role_2.name}",
+        "${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"
       ]
       stage_grants = ["READ", "WRITE"]
     }
     admin = { # Modifies admin default role
       granted_database_roles = [
-        snowflake_database_role.db_role_2.name
+        "${snowflake_database.this.name}.${snowflake_database_role.db_role_2.name}",
       ]
     }
     user_1 = { # User created database role
-      parent_database_role = snowflake_database_role.db_role_3.name
-      all_privileges       = true
-      with_grant_option    = true
-      on_future            = true
-      on_all               = true
+      granted_to_roles          = [snowflake_role.role_1.name]
+      granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
+      all_privileges            = true
+      with_grant_option         = true
+      on_future                 = true
+      on_all                    = true
     }
     user_2 = { # User created database role
-      parent_database_role = snowflake_database_role.db_role_3.name
-      stage_grants         = ["READ", "WRITE"]
-      with_grant_option    = false
-      on_future            = true
-      on_all               = false
+      granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
+      stage_grants              = ["READ", "WRITE"]
+      with_grant_option         = false
+      on_future                 = true
+      on_all                    = false
     }
   }
 

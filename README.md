@@ -58,7 +58,7 @@ Lst of code and variable (API) changes:
   - `on_all` - optional, bool, defaults to false
   - `on_future` - optional, bool, defaults to false
   - `with_grant_option` - optional, bool
-  - `parent_database_role` - optional, string
+  - `granted_to_database_roles` - optional, string
   - `granted_database_roles` - optional, list of strings
 
 - and got following items removed:
@@ -66,7 +66,6 @@ Lst of code and variable (API) changes:
   - `comment`
   - `role_ownership_grant`
   - `granted_roles`
-  - `granted_to_roles`
   - `granted_to_users`
 
 
@@ -108,7 +107,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | <a name="input_name"></a> [name](#input\_name) | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.<br>This is the only ID element not also included as a `tag`.<br>The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique | `string` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    with_grant_option      = optional(bool)<br>    parent_database_role   = optional(string)<br>    granted_database_roles = optional(list(string))<br>    stage_grants           = optional(list(string))<br>    all_privileges         = optional(bool)<br>    on_all                 = optional(bool, false)<br>    schema_name            = optional(string)<br>    on_future              = optional(bool, false)<br>  }))</pre> | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    with_grant_option         = optional(bool)<br>    granted_to_roles          = optional(list(string))<br>    granted_to_database_roles = optional(list(string))<br>    granted_database_roles    = optional(list(string))<br>    stage_grants              = optional(list(string))<br>    all_privileges            = optional(bool)<br>    on_all                    = optional(bool, false)<br>    schema_name               = optional(string)<br>    on_future                 = optional(bool, false)<br>  }))</pre> | `{}` | no |
 | <a name="input_schema"></a> [schema](#input\_schema) | The schema in which to create the stage | `string` | n/a | yes |
 | <a name="input_snowflake_iam_user"></a> [snowflake\_iam\_user](#input\_snowflake\_iam\_user) | Specifies the Snowflake IAM user | `string` | `null` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
@@ -123,7 +122,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_database_role"></a> [snowflake\_database\_role](#module\_snowflake\_database\_role) | getindata/database-role/snowflake | 1.0.0 |
+| <a name="module_snowflake_database_role"></a> [snowflake\_database\_role](#module\_snowflake\_database\_role) | getindata/database-role/snowflake | 1.1.0 |
 | <a name="module_stage_label"></a> [stage\_label](#module\_stage\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
@@ -131,8 +130,8 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 
 | Name | Description |
 |------|-------------|
+| <a name="output_databse_roles"></a> [databse\_roles](#output\_databse\_roles) | This stage access roles |
 | <a name="output_name"></a> [name](#output\_name) | Name of the stage |
-| <a name="output_roles"></a> [roles](#output\_roles) | This stage access roles |
 
 ## Providers
 
