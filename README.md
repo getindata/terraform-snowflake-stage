@@ -19,7 +19,7 @@ Terraform module for Snowflake stage management.
 * Can create a set of default roles to simplify access management:
     * `READONLY` - granted `USAGE` or `READ` privilages
     * `READWRITE` - granted `WRITE` privilages
-    * `ADMIN` - 
+    * `ADMIN` - granted `READ`, `WRITE` privilages (role can be additionally granted with `OWNER` attribute when specified)
 
 ## USAGE
 
