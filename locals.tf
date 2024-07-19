@@ -4,7 +4,6 @@ locals {
   name_from_descriptor = module.stage_label.enabled ? trim(replace(
     lookup(module.stage_label.descriptors, var.descriptor_name, module.stage_label.id), "/${module.stage_label.delimiter}${module.stage_label.delimiter}+/", module.stage_label.delimiter
   ), module.stage_label.delimiter) : null
-  create_default_databse_roles = module.this.enabled && var.create_default_databse_roles
 
   schema_object_stage_name = "\"${one(snowflake_stage.this[*].database)}\".\"${one(snowflake_stage.this[*].schema)}\".\"${one(snowflake_stage.this[*].name)}\""
 
@@ -26,32 +25,12 @@ locals {
     for k, v in role : k => v
     if v != null
   } }
-  
+
   roles_definition = module.roles_deep_merge.merged
-
-  # default_roles = {
-  #   for role_name, role in local.roles_definition : role_name => role
-  #   if contains(keys(local.default_roles_definition), role_name)
-  # }
-
-  # custom_roles = {
-  #   for role_name, role in local.roles_definition : role_name => role
-  #   if !contains(keys(local.default_roles_definition), role_name)
-  # }
 
   roles = {
     for role_name, role in local.roles_definition : role_name => role
-    # if !contains(keys(local.default_roles_definition), role_name)
   }
-
-  # roles = {
-  #   for role_name, role in merge(
-  #     # module.snowflake_default_database_role,
-  #     # module.snowflake_custom_database_role
-  #     module.snowflake_database_role
-  #   ) : role_name => role
-  #   if role.name != null
-  # }
 }
 
 module "roles_deep_merge" {

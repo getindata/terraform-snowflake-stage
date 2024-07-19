@@ -57,7 +57,7 @@ module "internal_stage" {
     }
     user_2 = { # User created database role
       parent_database_role = snowflake_database_role.db_role_3.name
-      stage_grants         = [ "READ", "WRITE" ]
+      stage_grants         = ["READ", "WRITE"]
       with_grant_option    = false
       on_future            = true
       on_all               = false

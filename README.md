@@ -15,11 +15,11 @@
 Terraform module for Snowflake stage management.
 
 * Creates Snowflake stage
-* Can create custom Snowflake roles with role-to-role, role-to-user assignments
+* Can create custom Snowflake databse-roles with role-to-role assignments
 * Can create a set of default roles to simplify access management:
     * `READONLY` - granted `USAGE` or `READ` privilages
     * `READWRITE` - granted `WRITE` privilages
-    * `ADMIN` - Full access, including schema options like `url` and `credentials`
+    * `ADMIN` - 
 
 ## USAGE
 
@@ -59,7 +59,7 @@ module "snowflake_stage" {
 | <a name="input_comment"></a> [comment](#input\_comment) | Specifies a comment for the stage | `string` | `null` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "descriptor_formats": {},<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "labels_as_tags": [<br>    "unset"<br>  ],<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {},<br>  "tenant": null<br>}</pre> | no |
 | <a name="input_copy_options"></a> [copy\_options](#input\_copy\_options) | Specifies the copy options for the stage | `string` | `null` | no |
-| <a name="input_create_default_roles"></a> [create\_default\_roles](#input\_create\_default\_roles) | Whether the default roles should be created | `bool` | `false` | no |
+| <a name="input_create_default_databse_roles"></a> [create\_default\_databse\_roles](#input\_create\_default\_databse\_roles) | Whether the default database roles should be created | `bool` | `false` | no |
 | <a name="input_credentials"></a> [credentials](#input\_credentials) | Specifies the credentials for the stage | `string` | `null` | no |
 | <a name="input_database"></a> [database](#input\_database) | The database in which to create the stage | `string` | n/a | yes |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
@@ -78,10 +78,11 @@ module "snowflake_stage" {
 | <a name="input_name"></a> [name](#input\_name) | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.<br>This is the only ID element not also included as a `tag`.<br>The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique | `string` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Roles created in the database scope | <pre>map(object({<br>    enabled              = optional(bool, true)<br>    comment              = optional(string)<br>    role_ownership_grant = optional(string)<br>    granted_roles        = optional(list(string))<br>    granted_to_roles     = optional(list(string))<br>    granted_to_users     = optional(list(string))<br>    stage_grants         = optional(list(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    with_grant_option      = optional(bool)<br>    parent_database_role   = optional(string)<br>    granted_database_roles = optional(list(string))<br>    stage_grants           = optional(list(string))<br>    all_privileges         = optional(bool)<br>    on_all                 = optional(bool, false)<br>    schema_name            = optional(string)<br>    on_future              = optional(bool, false)<br>  }))</pre> | `{}` | no |
 | <a name="input_schema"></a> [schema](#input\_schema) | The schema in which to create the stage | `string` | n/a | yes |
 | <a name="input_snowflake_iam_user"></a> [snowflake\_iam\_user](#input\_snowflake\_iam\_user) | Specifies the Snowflake IAM user | `string` | `null` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
+| <a name="input_stage_ownership_grant"></a> [stage\_ownership\_grant](#input\_stage\_ownership\_grant) | To which role the stage ownership should be granted | `string` | `null` | no |
 | <a name="input_storage_integration"></a> [storage\_integration](#input\_storage\_integration) | Specifies the name of the storage integration used to delegate authentication responsibility for external cloud storage to a Snowflake identity and access management (IAM) entity | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).<br>Neither the tag keys nor the tag values will be modified by this module. | `map(string)` | `{}` | no |
 | <a name="input_tenant"></a> [tenant](#input\_tenant) | ID element \_(Rarely used, not included by default)\_. A customer identifier, indicating who this instance of a resource is for | `string` | `null` | no |
@@ -92,8 +93,7 @@ module "snowflake_stage" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/role/snowflake | 1.0.3 |
-| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/role/snowflake | 1.0.3 |
+| <a name="module_snowflake_database_role"></a> [snowflake\_database\_role](#module\_snowflake\_database\_role) | getindata/database-role/snowflake | 1.0.0 |
 | <a name="module_stage_label"></a> [stage\_label](#module\_stage\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
@@ -108,21 +108,21 @@ module "snowflake_stage" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.54 |
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.90 |
 
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.54 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.90 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [snowflake_grant_ownership.stage_ownership](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/grant_ownership) | resource |
 | [snowflake_stage.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/stage) | resource |
-| [snowflake_stage_grant.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/stage_grant) | resource |
 <!-- END_TF_DOCS -->
 
 ## CONTRIBUTING
