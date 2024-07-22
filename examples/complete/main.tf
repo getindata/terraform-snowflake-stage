@@ -54,7 +54,7 @@ module "internal_stage" {
         "${snowflake_database.this.name}.${snowflake_database_role.db_role_2.name}",
       ]
     }
-    user_1 = { # User created database role
+    role_1 = { # User created database role
       granted_to_roles          = [snowflake_role.role_1.name]
       granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
       all_privileges            = true
@@ -62,7 +62,7 @@ module "internal_stage" {
       on_future                 = true
       on_all                    = true
     }
-    user_2 = { # User created database role
+    role_2 = { # User created database role
       granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
       stage_grants              = ["READ", "WRITE"]
       with_grant_option         = false
@@ -71,5 +71,5 @@ module "internal_stage" {
     }
   }
 
-  stage_ownership_grant = "user_1"
+  stage_ownership_grant = "role_1"
 }
