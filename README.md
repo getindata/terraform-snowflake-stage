@@ -15,11 +15,11 @@
 Terraform module for Snowflake stage management.
 
 * Creates Snowflake stage
-* Can create custom Snowflake databse-roles with role-to-role assignments
+* Can create custom Snowflake database-roles with role-to-role assignments
 * Can create a set of default roles to simplify access management:
     * `READONLY` - granted `USAGE` or `READ` privilages
-    * `READWRITE` - granted `WRITE` privilages
-    * `ADMIN` - granted `READ`, `WRITE` privilages (role can be additionally granted with `OWNER` attribute when specified)
+    * `READWRITE` - granted `WRITE` privileges
+    * `ADMIN` - granted `READ`, `WRITE` privileges (role can be additionally granted with `OWNER` attribute when specified)
 
 ## USAGE
 
@@ -35,7 +35,7 @@ module "snowflake_stage" {
   url         = "s3://com.example.bucket/prefix"
   credentials = "AWS_KEY_ID='${var.example_aws_key_id}' AWS_SECRET_KEY='${var.example_aws_secret_key}'"
   
-  create_default_roles = true
+  create_default_database_roles = true
 }
 ```
 
@@ -48,11 +48,11 @@ module "snowflake_stage" {
 ## Breaking changes in v2.x of the module
 Due to breaking changes in Snowflake provider and additional code optimizations, **breaking changes** were introduced in `v2.0.0` version of this module.
 
-Lst of code and variable (API) changes:
+List of code and variable (API) changes:
 - Switched to `snowflake_grant_ownership` resource instead of provider-removed `snowflake_role_ownership_grant`
 - Switched to `snowflake_database_role` module to leverage new `database_roles` mechanism
 - `default_roles` and `custom_roles` are now combined and managed by single module
-- `create_default_roles` variable was renamed to `create_default_databse_roles`
+- `create_default_roles` variable was renamed to `create_default_database_roles`
 - `roles` variable map received following additions:
   - `all_privileges` - optional, bool
   - `on_all` - optional, bool, defaults to false
@@ -88,7 +88,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | <a name="input_comment"></a> [comment](#input\_comment) | Specifies a comment for the stage | `string` | `null` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "descriptor_formats": {},<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "labels_as_tags": [<br>    "unset"<br>  ],<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {},<br>  "tenant": null<br>}</pre> | no |
 | <a name="input_copy_options"></a> [copy\_options](#input\_copy\_options) | Specifies the copy options for the stage | `string` | `null` | no |
-| <a name="input_create_default_databse_roles"></a> [create\_default\_databse\_roles](#input\_create\_default\_databse\_roles) | Whether the default database roles should be created | `bool` | `false` | no |
+| <a name="input_create_default_database_roles"></a> [create\_default\_database\_roles](#input\_create\_default\_database\_roles) | Whether the default database roles should be created | `bool` | `false` | no |
 | <a name="input_credentials"></a> [credentials](#input\_credentials) | Specifies the credentials for the stage | `string` | `null` | no |
 | <a name="input_database"></a> [database](#input\_database) | The database in which to create the stage | `string` | n/a | yes |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
@@ -107,7 +107,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | <a name="input_name"></a> [name](#input\_name) | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.<br>This is the only ID element not also included as a `tag`.<br>The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique | `string` | `null` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    with_grant_option         = optional(bool)<br>    granted_to_roles          = optional(list(string))<br>    granted_to_database_roles = optional(list(string))<br>    granted_database_roles    = optional(list(string))<br>    stage_grants              = optional(list(string))<br>    all_privileges            = optional(bool)<br>    on_all                    = optional(bool, false)<br>    schema_name               = optional(string)<br>    on_future                 = optional(bool, false)<br>  }))</pre> | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    enabled                   = optional(bool, true)<br>    with_grant_option         = optional(bool)<br>    granted_to_roles          = optional(list(string))<br>    granted_to_database_roles = optional(list(string))<br>    granted_database_roles    = optional(list(string))<br>    stage_grants              = optional(list(string))<br>    all_privileges            = optional(bool)<br>    on_all                    = optional(bool, false)<br>    schema_name               = optional(string)<br>    on_future                 = optional(bool, false)<br>  }))</pre> | `{}` | no |
 | <a name="input_schema"></a> [schema](#input\_schema) | The schema in which to create the stage | `string` | n/a | yes |
 | <a name="input_snowflake_iam_user"></a> [snowflake\_iam\_user](#input\_snowflake\_iam\_user) | Specifies the Snowflake IAM user | `string` | `null` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
@@ -130,7 +130,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 
 | Name | Description |
 |------|-------------|
-| <a name="output_databse_roles"></a> [databse\_roles](#output\_databse\_roles) | This stage access roles |
+| <a name="output_database_roles"></a> [database\_roles](#output\_database\_roles) | This stage access roles |
 | <a name="output_name"></a> [name](#output\_name) | Name of the stage |
 
 ## Providers

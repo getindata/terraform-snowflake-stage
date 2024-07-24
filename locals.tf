@@ -9,14 +9,17 @@ locals {
 
   is_internal = var.url == null
 
-  default_roles_definition = var.create_default_databse_roles ? {
+  default_roles_definition = var.create_default_database_roles ? {
     readonly = {
+      enabled      = true
       stage_grants = local.is_internal ? ["READ"] : ["USAGE"]
     }
     readwrite = {
+      enabled      = true
       stage_grants = local.is_internal ? ["READ", "WRITE"] : ["USAGE"]
     }
     admin = {
+      enabled      = true
       stage_grants = local.is_internal ? ["READ", "WRITE"] : ["USAGE"]
     }
   } : {}
@@ -26,10 +29,9 @@ locals {
     if v != null
   } }
 
-  roles_definition = module.roles_deep_merge.merged
-
   roles = {
-    for role_name, role in local.roles_definition : role_name => role
+    for role_name, role in module.roles_deep_merge.merged : role_name => role
+    if role_name != null && role.enabled
   }
 }
 

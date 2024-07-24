@@ -3,7 +3,7 @@ output "name" {
   value       = one(snowflake_stage.this[*].name)
 }
 
-output "databse_roles" {
+output "database_roles" {
   description = "This stage access roles"
   value       = local.roles
 }

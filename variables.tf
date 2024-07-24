@@ -74,7 +74,7 @@ variable "url" {
   default     = null
 }
 
-variable "create_default_databse_roles" {
+variable "create_default_database_roles" {
   description = "Whether the default database roles should be created"
   type        = bool
   default     = false
@@ -83,6 +83,7 @@ variable "create_default_databse_roles" {
 variable "roles" {
   description = "Database roles created in the stage scope"
   type = map(object({
+    enabled                   = optional(bool, true)
     with_grant_option         = optional(bool)
     granted_to_roles          = optional(list(string))
     granted_to_database_roles = optional(list(string))
