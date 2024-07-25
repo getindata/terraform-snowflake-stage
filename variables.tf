@@ -74,22 +74,31 @@ variable "url" {
   default     = null
 }
 
-variable "create_default_roles" {
-  description = "Whether the default roles should be created"
+variable "create_default_database_roles" {
+  description = "Whether the default database roles should be created"
   type        = bool
   default     = false
 }
 
 variable "roles" {
-  description = "Roles created in the database scope"
+  description = "Database roles created in the stage scope"
   type = map(object({
-    enabled              = optional(bool, true)
-    comment              = optional(string)
-    role_ownership_grant = optional(string)
-    granted_roles        = optional(list(string))
-    granted_to_roles     = optional(list(string))
-    granted_to_users     = optional(list(string))
-    stage_grants         = optional(list(string))
+    enabled                   = optional(bool, true)
+    with_grant_option         = optional(bool)
+    granted_to_roles          = optional(list(string))
+    granted_to_database_roles = optional(list(string))
+    granted_database_roles    = optional(list(string))
+    stage_grants              = optional(list(string))
+    all_privileges            = optional(bool)
+    on_all                    = optional(bool, false)
+    schema_name               = optional(string)
+    on_future                 = optional(bool, false)
   }))
   default = {}
+}
+
+variable "stage_ownership_grant" {
+  description = "To which role the stage ownership should be granted"
+  type        = string
+  default     = null
 }

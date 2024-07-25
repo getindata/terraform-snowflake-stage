@@ -13,7 +13,7 @@ descriptor_formats = {
   }
   snowflake-stage = {
     labels = ["name", "attributes"]
-    format = "%v_%v_STAGE"
+    format = "%v_%v"
   }
 }
 
