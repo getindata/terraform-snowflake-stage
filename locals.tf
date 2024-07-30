@@ -9,7 +9,7 @@ locals {
 
   is_internal = var.url == null
 
-  default_roles_definition = var.create_default_database_roles ? {
+  default_roles_definition = var.create_default_roles ? {
     readonly = {
       enabled      = true
       stage_grants = local.is_internal ? ["READ"] : ["USAGE"]

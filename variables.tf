@@ -74,7 +74,7 @@ variable "url" {
   default     = null
 }
 
-variable "create_default_database_roles" {
+variable "create_default_roles" {
   description = "Whether the default database roles should be created"
   type        = bool
   default     = false
