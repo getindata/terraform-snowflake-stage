@@ -36,7 +36,7 @@ module "internal_stage" {
 
   comment = "This is my ingest stage"
 
-  create_default_database_roles = true
+  create_default_roles = true
 
   roles = {
     readonly = { # Modifies readonly default database role
