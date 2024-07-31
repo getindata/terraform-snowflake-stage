@@ -19,7 +19,7 @@ Terraform module for Snowflake stage management.
 * Can create a set of default roles to simplify access management:
     * `READONLY` - granted `USAGE` or `READ` privilages
     * `READWRITE` - granted `WRITE` privileges
-    * `ADMIN` - granted `READ`, `WRITE` privileges (role can be additionally granted with `OWNER` attribute when specified)
+    * `ADMIN` - granted `ALL PRIVILEGES`
 
 ## USAGE
 
@@ -52,7 +52,6 @@ List of code and variable (API) changes:
 - Switched to `snowflake_grant_ownership` resource instead of provider-removed `snowflake_role_ownership_grant`
 - Switched to `snowflake_database_role` module to leverage new `database_roles` mechanism
 - `default_roles` and `custom_roles` are now combined and managed by single module
-- `create_default_roles` variable was renamed to `create_default_database_roles`
 - `roles` variable map received following additions:
   - `all_privileges` - optional, bool
   - `on_all` - optional, bool, defaults to false
@@ -111,7 +110,7 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | <a name="input_schema"></a> [schema](#input\_schema) | The schema in which to create the stage | `string` | n/a | yes |
 | <a name="input_snowflake_iam_user"></a> [snowflake\_iam\_user](#input\_snowflake\_iam\_user) | Specifies the Snowflake IAM user | `string` | `null` | no |
 | <a name="input_stage"></a> [stage](#input\_stage) | ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
-| <a name="input_stage_ownership_grant"></a> [stage\_ownership\_grant](#input\_stage\_ownership\_grant) | To which role the stage ownership should be granted | `string` | `null` | no |
+| <a name="input_stage_ownership_grant"></a> [stage\_ownership\_grant](#input\_stage\_ownership\_grant) | To which account role the stage ownership should be granted | `string` | `null` | no |
 | <a name="input_storage_integration"></a> [storage\_integration](#input\_storage\_integration) | Specifies the name of the storage integration used to delegate authentication responsibility for external cloud storage to a Snowflake identity and access management (IAM) entity | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `{'BusinessUnit': 'XYZ'}`).<br>Neither the tag keys nor the tag values will be modified by this module. | `map(string)` | `{}` | no |
 | <a name="input_tenant"></a> [tenant](#input\_tenant) | ID element \_(Rarely used, not included by default)\_. A customer identifier, indicating who this instance of a resource is for | `string` | `null` | no |
@@ -122,7 +121,8 @@ For more information, refer to [variables.tf](variables.tf), list of inputs belo
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_database_role"></a> [snowflake\_database\_role](#module\_snowflake\_database\_role) | getindata/database-role/snowflake | 1.1.0 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/database-role/snowflake | 1.1.1 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/database-role/snowflake | 1.1.1 |
 | <a name="module_stage_label"></a> [stage\_label](#module\_stage\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 

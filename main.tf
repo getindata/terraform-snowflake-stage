@@ -27,12 +27,13 @@ resource "snowflake_stage" "this" {
   url                 = var.url
 }
 
-module "snowflake_database_role" {
-  for_each = local.roles
+module "snowflake_default_role" {
+  for_each = local.default_roles
 
   source  = "getindata/database-role/snowflake"
-  version = "1.1.0"
+  version = "1.1.1"
   context = module.this.context
+  enabled = local.create_default_roles && lookup(each.value, "enabled", true)
 
   database_name = one(snowflake_stage.this[*].database)
   name          = each.key
@@ -59,15 +60,58 @@ module "snowflake_database_role" {
       }
     ]
   }
+
+  depends_on = [
+    snowflake_stage.this
+  ]
 }
 
 resource "snowflake_grant_ownership" "stage_ownership" {
   count = var.stage_ownership_grant != null ? 1 : 0
 
-  database_role_name  = module.snowflake_database_role[var.stage_ownership_grant].fully_qualified_name
+  account_role_name   = var.stage_ownership_grant
   outbound_privileges = "REVOKE"
   on {
     object_type = "STAGE"
     object_name = local.schema_object_stage_name
   }
+}
+
+module "snowflake_custom_role" {
+  for_each = local.custom_roles
+
+  source  = "getindata/database-role/snowflake"
+  version = "1.1.1"
+  context = module.this.context
+  enabled = module.this.enabled && lookup(each.value, "enabled", true)
+
+  database_name = one(snowflake_stage.this[*].database)
+  name          = each.key
+
+  granted_to_roles          = lookup(each.value, "granted_to_roles", [])
+  granted_to_database_roles = lookup(each.value, "granted_to_database_roles", [])
+  granted_database_roles    = lookup(each.value, "granted_database_roles", [])
+
+  attributes = [
+    one(snowflake_stage.this[*].schema),
+    one(snowflake_stage.this[*].name)
+  ]
+
+  schema_objects_grants = {
+    "STAGE" = [
+      {
+        privileges        = lookup(each.value, "stage_grants", null)
+        all_privileges    = lookup(each.value, "all_privileges", null)
+        with_grant_option = lookup(each.value, "with_grant_option", false)
+        on_future         = lookup(each.value, "on_future", false)
+        on_all            = lookup(each.value, "on_all", false)
+        object_name       = (lookup(each.value, "on_future", false) || lookup(each.value, "on_all", false)) ? null : one(snowflake_stage.this[*].name)
+        schema_name       = one(snowflake_stage.this[*].schema)
+      }
+    ]
+  }
+
+  depends_on = [
+    snowflake_stage.this
+  ]
 }

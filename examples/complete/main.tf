@@ -7,7 +7,7 @@ resource "snowflake_schema" "this" {
   database = snowflake_database.this.name
 }
 
-resource "snowflake_role" "role_1" {
+resource "snowflake_account_role" "role_1" {
   name = "ROLE_1"
 }
 
@@ -58,7 +58,7 @@ module "internal_stage" {
       enabled = false # Disables readwrite default database role creation
     }
     role_1 = { # Database role created by user input
-      granted_to_roles          = [snowflake_role.role_1.name]
+      granted_to_roles          = [snowflake_account_role.role_1.name]
       granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
       all_privileges            = true
       with_grant_option         = true
@@ -71,8 +71,9 @@ module "internal_stage" {
       with_grant_option         = false
       on_future                 = true
       on_all                    = false
+      enabled                   = false
     }
   }
 
-  stage_ownership_grant = "role_1" # When destroying, please read README.md
+  stage_ownership_grant = snowflake_account_role.role_1.name
 }
