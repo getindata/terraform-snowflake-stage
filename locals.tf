@@ -6,7 +6,7 @@ locals {
   ), module.stage_label.delimiter) : null
 
   create_default_roles     = module.this.enabled && var.create_default_roles
-  schema_object_stage_name = "\"${one(snowflake_stage.this[*].database)}\".\"${one(snowflake_stage.this[*].schema)}\".\"${one(snowflake_stage.this[*].name)}\""
+  schema_object_stage_name = module.this.enabled ? "\"${one(snowflake_stage.this[*].database)}\".\"${one(snowflake_stage.this[*].schema)}\".\"${one(snowflake_stage.this[*].name)}\"" : null
 
   is_internal = var.url == null
 
