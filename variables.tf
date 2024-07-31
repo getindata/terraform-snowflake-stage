@@ -98,7 +98,7 @@ variable "roles" {
 }
 
 variable "stage_ownership_grant" {
-  description = "To which role the stage ownership should be granted"
+  description = "To which account role the stage ownership should be granted"
   type        = string
   default     = null
 }
