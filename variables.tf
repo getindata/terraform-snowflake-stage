@@ -90,9 +90,6 @@ variable "roles" {
     granted_database_roles    = optional(list(string))
     stage_grants              = optional(list(string))
     all_privileges            = optional(bool)
-    on_all                    = optional(bool, false)
-    schema_name               = optional(string)
-    on_future                 = optional(bool, false)
   }))
   default = {}
 }

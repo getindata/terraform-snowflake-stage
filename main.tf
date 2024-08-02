@@ -103,8 +103,6 @@ module "snowflake_custom_role" {
         privileges        = lookup(each.value, "stage_grants", null)
         all_privileges    = lookup(each.value, "all_privileges", null)
         with_grant_option = lookup(each.value, "with_grant_option", false)
-        on_future         = lookup(each.value, "on_future", false)
-        on_all            = lookup(each.value, "on_all", false)
         object_name       = (lookup(each.value, "on_future", false) || lookup(each.value, "on_all", false)) ? null : one(snowflake_stage.this[*].name)
         schema_name       = one(snowflake_stage.this[*].schema)
       }
