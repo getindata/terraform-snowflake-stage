@@ -1,12 +1,15 @@
 locals {
-  # Get a name from the descriptor. If not available, use default naming convention.
-  # Trim and replace function are used to avoid bare delimiters on both ends of the name and situation of adjacent delimiters.
-  name_from_descriptor = module.stage_label.enabled ? trim(replace(
-    lookup(module.stage_label.descriptors, var.descriptor_name, module.stage_label.id), "/${module.stage_label.delimiter}${module.stage_label.delimiter}+/", module.stage_label.delimiter
-  ), module.stage_label.delimiter) : null
+  context_template = lookup(var.context_templates, var.name_scheme.context_template_name, null)
 
-  create_default_roles     = module.this.enabled && var.create_default_roles
-  schema_object_stage_name = module.this.enabled ? "\"${one(snowflake_stage.this[*].database)}\".\"${one(snowflake_stage.this[*].schema)}\".\"${one(snowflake_stage.this[*].name)}\"" : null
+  default_role_naming_scheme = {
+    properties            = ["schema", "stage", "suffix", "name"]
+    context_template_name = "snowflake-stage-database-role"
+    extra_values = {
+      stage  = var.name
+      schema = var.schema
+      suffix = "stg"
+    }
+  }
 
   is_internal = var.url == null
 
@@ -26,7 +29,7 @@ locals {
 
   default_roles = {
     for role_name, role in local.roles_definition : role_name => role
-    if contains(keys(local.default_roles_definition), role_name)
+    if contains(keys(local.default_roles_definition), role_name) && var.create_default_roles
   }
 
   custom_roles = {

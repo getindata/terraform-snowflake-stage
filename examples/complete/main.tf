@@ -26,9 +26,10 @@ resource "snowflake_database_role" "db_role_3" {
   name     = "DB_ROLE_3"
 }
 
-module "internal_stage" {
-  source  = "../../"
-  context = module.this.context
+module "internal_stage_1" {
+  source = "../../"
+
+  context_templates = var.context_templates
 
   name     = "INGEST"
   schema   = snowflake_schema.this.name
@@ -54,9 +55,6 @@ module "internal_stage" {
         "${snowflake_database.this.name}.${snowflake_database_role.db_role_2.name}",
       ]
     }
-    readwrite = {
-      enabled = false # Disables readwrite default database role creation
-    }
     role_1 = { # Database role created by user input
       granted_to_roles          = [snowflake_account_role.role_1.name]
       granted_to_database_roles = ["${snowflake_database.this.name}.${snowflake_database_role.db_role_3.name}"]
@@ -71,9 +69,24 @@ module "internal_stage" {
       with_grant_option         = false
       on_future                 = true
       on_all                    = false
-      enabled                   = false
     }
   }
 
   stage_ownership_grant = snowflake_account_role.role_1.name
+}
+
+module "internal_stage_2" {
+  source = "../../"
+
+  #context_templates = var.context_templates
+  name = "stage_2"
+  name_scheme = {
+    context_template_name = "snowflake-project-stage"
+    extra_values = {
+      project = "project"
+    }
+  }
+
+  schema   = snowflake_schema.this.name
+  database = snowflake_database.this.name
 }
