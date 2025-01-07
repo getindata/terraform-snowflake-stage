@@ -85,6 +85,7 @@ module "internal_stage_2" {
     extra_values = {
       project = "project"
     }
+    uppercase = false
   }
 
   schema   = snowflake_schema.this.name

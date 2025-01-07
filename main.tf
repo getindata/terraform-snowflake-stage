@@ -12,7 +12,7 @@ data "context_label" "this" {
 }
 
 resource "snowflake_stage" "this" {
-  name     = data.context_label.this.rendered
+  name     = var.name_scheme.uppercase ? upper(data.context_label.this.rendered) : data.context_label.this.rendered
   database = var.database
   schema   = var.schema
 
@@ -41,13 +41,15 @@ resource "snowflake_grant_ownership" "stage_ownership" {
     object_type = "STAGE"
     object_name = snowflake_stage.this.fully_qualified_name
   }
+
+  depends_on = [snowflake_stage.this]
 }
 
 module "snowflake_default_role" {
   for_each = local.default_roles
 
   source  = "getindata/database-role/snowflake"
-  version = "2.0.1"
+  version = "2.1.0"
 
   database_name     = snowflake_stage.this.database
   context_templates = var.context_templates
@@ -76,13 +78,15 @@ module "snowflake_default_role" {
       }
     ]
   }
+
+  depends_on = [snowflake_stage.this]
 }
 
 module "snowflake_custom_role" {
   for_each = local.custom_roles
 
   source  = "getindata/database-role/snowflake"
-  version = "2.0.1"
+  version = "2.1.0"
 
   database_name     = snowflake_stage.this.database
   context_templates = var.context_templates
@@ -111,4 +115,6 @@ module "snowflake_custom_role" {
       }
     ]
   }
+
+  depends_on = [snowflake_stage.this]
 }
