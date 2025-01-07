@@ -9,6 +9,7 @@ locals {
       schema = var.schema
       suffix = "stg"
     }
+    uppercase = var.name_scheme.uppercase
   }
 
   is_internal = var.url == null

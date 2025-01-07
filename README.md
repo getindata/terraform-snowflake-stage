@@ -123,8 +123,8 @@ List od code and variable (API) changes:
 | <a name="input_encryption"></a> [encryption](#input\_encryption) | Specifies the encryption settings for the stage | `string` | `null` | no |
 | <a name="input_file_format"></a> [file\_format](#input\_file\_format) | Specifies the file format for the stage | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the resource | `string` | n/a | yes |
-| <a name="input_name_scheme"></a> [name\_scheme](#input\_name\_scheme) | Naming scheme configuration for the resource. This configuration is used to generate names using context provider:<br>    - `properties` - list of properties to use when creating the name - is superseded by `var.context_templates`<br>    - `delimiter` - delimited used to create the name from `properties` - is superseded by `var.context_templates`<br>    - `context_template_name` - name of the context template used to create the name<br>    - `replace_chars_regex` - regex to use for replacing characters in property-values created by the provider - any characters that match the regex will be removed from the name<br>    - `extra_values` - map of extra label-value pairs, used to create a name | <pre>object({<br>    properties            = optional(list(string), ["name"])<br>    delimiter             = optional(string, "_")<br>    context_template_name = optional(string, "snowflake-stage")<br>    replace_chars_regex   = optional(string, "[^a-zA-Z0-9_]")<br>    extra_values          = optional(map(string))<br>  })</pre> | `{}` | no |
-| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br>    name_scheme = optional(object({<br>      properties            = optional(list(string))<br>      delimiter             = optional(string)<br>      context_template_name = optional(string)<br>      replace_chars_regex   = optional(string)<br>      extra_labels          = optional(map(string))<br>    }))<br>    comment                   = optional(string)<br>    with_grant_option         = optional(bool)<br>    granted_to_roles          = optional(list(string))<br>    granted_to_database_roles = optional(list(string))<br>    granted_database_roles    = optional(list(string))<br>    stage_grants              = optional(list(string))<br>    all_privileges            = optional(bool)<br>  }))</pre> | `{}` | no |
+| <a name="input_name_scheme"></a> [name\_scheme](#input\_name\_scheme) | Naming scheme configuration for the resource. This configuration is used to generate names using context provider:<br/>    - `properties` - list of properties to use when creating the name - is superseded by `var.context_templates`<br/>    - `delimiter` - delimited used to create the name from `properties` - is superseded by `var.context_templates`<br/>    - `context_template_name` - name of the context template used to create the name<br/>    - `replace_chars_regex` - regex to use for replacing characters in property-values created by the provider - any characters that match the regex will be removed from the name<br/>    - `extra_values` - map of extra label-value pairs, used to create a name<br/>    - `uppercase` - convert name to uppercase | <pre>object({<br/>    properties            = optional(list(string), ["name"])<br/>    delimiter             = optional(string, "_")<br/>    context_template_name = optional(string, "snowflake-stage")<br/>    replace_chars_regex   = optional(string, "[^a-zA-Z0-9_]")<br/>    extra_values          = optional(map(string))<br/>    uppercase             = optional(bool, true)<br/>  })</pre> | `{}` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | Database roles created in the stage scope | <pre>map(object({<br/>    name_scheme = optional(object({<br/>      properties            = optional(list(string))<br/>      delimiter             = optional(string)<br/>      context_template_name = optional(string)<br/>      replace_chars_regex   = optional(string)<br/>      extra_labels          = optional(map(string))<br/>      uppercase             = optional(bool)<br/>    }))<br/>    comment                   = optional(string)<br/>    with_grant_option         = optional(bool)<br/>    granted_to_roles          = optional(list(string))<br/>    granted_to_database_roles = optional(list(string))<br/>    granted_database_roles    = optional(list(string))<br/>    stage_grants              = optional(list(string))<br/>    all_privileges            = optional(bool)<br/>  }))</pre> | `{}` | no |
 | <a name="input_schema"></a> [schema](#input\_schema) | The schema in which to create the stage | `string` | n/a | yes |
 | <a name="input_snowflake_iam_user"></a> [snowflake\_iam\_user](#input\_snowflake\_iam\_user) | Specifies the Snowflake IAM user | `string` | `null` | no |
 | <a name="input_stage_ownership_grant"></a> [stage\_ownership\_grant](#input\_stage\_ownership\_grant) | To which account role the stage ownership should be granted | `string` | `null` | no |
@@ -136,8 +136,8 @@ List od code and variable (API) changes:
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/database-role/snowflake | 2.0.1 |
-| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/database-role/snowflake | 2.0.1 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/database-role/snowflake | 2.1.0 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/database-role/snowflake | 2.1.0 |
 
 ## Outputs
 
@@ -152,7 +152,7 @@ List od code and variable (API) changes:
 | Name | Version |
 |------|---------|
 | <a name="provider_context"></a> [context](#provider\_context) | >=0.4.0 |
-| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | >= 0.95 |
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.95 |
 
 ## Requirements
 
@@ -160,7 +160,7 @@ List od code and variable (API) changes:
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
 | <a name="requirement_context"></a> [context](#requirement\_context) | >=0.4.0 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | >= 0.95 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.95 |
 
 ## Resources
 
