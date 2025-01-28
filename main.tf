@@ -41,8 +41,6 @@ resource "snowflake_grant_ownership" "stage_ownership" {
     object_type = "STAGE"
     object_name = snowflake_stage.this.fully_qualified_name
   }
-
-  depends_on = [snowflake_stage.this]
 }
 
 module "snowflake_default_role" {
@@ -78,8 +76,6 @@ module "snowflake_default_role" {
       }
     ]
   }
-
-  depends_on = [snowflake_stage.this]
 }
 
 module "snowflake_custom_role" {
@@ -115,6 +111,4 @@ module "snowflake_custom_role" {
       }
     ]
   }
-
-  depends_on = [snowflake_stage.this]
 }
