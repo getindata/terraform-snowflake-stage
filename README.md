@@ -103,6 +103,14 @@ List od code and variable (API) changes:
   - `context_templates`
   - `name_schema`
 
+## Breaking changes in v4.x of the module
+
+Due to rename of Snowflake terraform provider source, all `versions.tf` files were updated accordingly.
+
+Please keep in mind to mirror this change in your own repos also.
+
+[Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md)
+
 <!-- BEGIN_TF_DOCS -->
 
 
