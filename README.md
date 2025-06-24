@@ -103,6 +103,14 @@ List od code and variable (API) changes:
   - `context_templates`
   - `name_schema`
 
+## Breaking changes in v4.x of the module
+
+Due to rename of Snowflake terraform provider source, all `versions.tf` files were updated accordingly.
+
+Please keep in mind to mirror this change in your own repos also.
+
+[Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md)
+
 <!-- BEGIN_TF_DOCS -->
 
 
@@ -166,8 +174,8 @@ List od code and variable (API) changes:
 
 | Name | Type |
 |------|------|
-| [snowflake_grant_ownership.stage_ownership](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/grant_ownership) | resource |
-| [snowflake_stage.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/stage) | resource |
+| [snowflake_grant_ownership.stage_ownership](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/grant_ownership) | resource |
+| [snowflake_stage.this](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage) | resource |
 | [context_label.this](https://registry.terraform.io/providers/cloudposse/context/latest/docs/data-sources/label) | data source |
 <!-- END_TF_DOCS -->
 
