@@ -166,8 +166,8 @@ List od code and variable (API) changes:
 
 | Name | Type |
 |------|------|
-| [snowflake_grant_ownership.stage_ownership](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/grant_ownership) | resource |
-| [snowflake_stage.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/stage) | resource |
+| [snowflake_grant_ownership.stage_ownership](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/grant_ownership) | resource |
+| [snowflake_stage.this](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage) | resource |
 | [context_label.this](https://registry.terraform.io/providers/cloudposse/context/latest/docs/data-sources/label) | data source |
 <!-- END_TF_DOCS -->
 

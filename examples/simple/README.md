@@ -60,6 +60,6 @@ No inputs.
 
 | Name | Type |
 |------|------|
-| [snowflake_database.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/database) | resource |
-| [snowflake_schema.this](https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/schema) | resource |
+| [snowflake_database.this](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/database) | resource |
+| [snowflake_schema.this](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/schema) | resource |
 <!-- END_TF_DOCS -->
