@@ -105,31 +105,29 @@ List od code and variable (API) changes:
 
 ## Breaking changes in v4.x of the module
 
-Due to rename of Snowflake terraform provider source, all `versions.tf` files were updated accordingly.
+- Due to rename of Snowflake terraform provider source, all `versions.tf` files were updated accordingly.
 
-Please keep in mind to mirror this change in your own repos also.
+  Please keep in mind to mirror this change in your own repos also.
 
-[Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md)
+  For more information about provider rename, refer to [Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md).
 
-## Preview Feature Requirements (Provider version 1.x+)
+- Maximal version of supported provider was also unblocked in version `v4.1.x` , so keep in mind that, starting with Snowflake provider version `1.x`, the `snowflake_stage` resource is considered a preview feature and must be explicitly enabled in the provider configuration.
 
-Starting with Snowflake provider version `1.x`, the `snowflake_stage` resource is considered a preview feature and must be explicitly enabled in the provider configuration.
+  **Required Provider Configuration:**
 
-**Required Provider Configuration:**
+  ```terraform
+  provider "snowflake" {
+    preview_features_enabled = ["snowflake_stage_resource"]
+  }
+  ```
 
-```terraform
-provider "snowflake" {
-  preview_features_enabled = ["snowflake_stage_resource"]
-}
-```
+  Without this configuration, you will encounter the following error:
 
-Without this configuration, you will encounter the following error:
+  ```shell
+  Error: snowflake_stage_resource is currently a preview feature, and must be enabled by adding snowflake_stage_resource to preview_features_enabled in Terraform configuration.
+  ```
 
-```shell
-Error: snowflake_stage_resource is currently a preview feature, and must be enabled by adding snowflake_stage_resource to preview_features_enabled in Terraform configuration.
-```
-
-For more information about preview features, refer to the [Snowflake provider documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage#preview-features) and [Snowflake stage resource documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage).
+  For more information about preview features, refer to the [Snowflake provider documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage#preview-features) and [Snowflake stage resource documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage).
 
 <!-- BEGIN_TF_DOCS -->
 
