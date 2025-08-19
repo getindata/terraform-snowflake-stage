@@ -111,6 +111,26 @@ Please keep in mind to mirror this change in your own repos also.
 
 [Snowflake documentation](https://github.com/snowflakedb/terraform-provider-snowflake/blob/main/SNOWFLAKEDB_MIGRATION.md)
 
+## Preview Feature Requirements (Provider version 1.x+)
+
+Starting with Snowflake provider version `1.x`, the `snowflake_stage` resource is considered a preview feature and must be explicitly enabled in the provider configuration.
+
+**Required Provider Configuration:**
+
+```terraform
+provider "snowflake" {
+  preview_features_enabled = ["snowflake_stage_resource"]
+}
+```
+
+Without this configuration, you will encounter the following error:
+
+```shell
+Error: snowflake_stage_resource is currently a preview feature, and must be enabled by adding snowflake_stage_resource to preview_features_enabled in Terraform configuration.
+```
+
+For more information about preview features, refer to the [Snowflake provider documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage#preview-features) and [Snowflake stage resource documentation](https://registry.terraform.io/providers/snowflakedb/snowflake/latest/docs/resources/stage).
+
 <!-- BEGIN_TF_DOCS -->
 
 
@@ -144,8 +164,8 @@ Please keep in mind to mirror this change in your own repos also.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_roles_deep_merge"></a> [roles\_deep\_merge](#module\_roles\_deep\_merge) | Invicton-Labs/deepmerge/null | 0.1.5 |
-| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/database-role/snowflake | 2.1.0 |
-| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/database-role/snowflake | 2.1.0 |
+| <a name="module_snowflake_custom_role"></a> [snowflake\_custom\_role](#module\_snowflake\_custom\_role) | getindata/database-role/snowflake | 3.0.0 |
+| <a name="module_snowflake_default_role"></a> [snowflake\_default\_role](#module\_snowflake\_default\_role) | getindata/database-role/snowflake | 3.0.0 |
 
 ## Outputs
 
@@ -160,7 +180,7 @@ Please keep in mind to mirror this change in your own repos also.
 | Name | Version |
 |------|---------|
 | <a name="provider_context"></a> [context](#provider\_context) | >=0.4.0 |
-| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | ~> 0.95 |
+| <a name="provider_snowflake"></a> [snowflake](#provider\_snowflake) | >= 0.95 |
 
 ## Requirements
 
@@ -168,7 +188,7 @@ Please keep in mind to mirror this change in your own repos also.
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
 | <a name="requirement_context"></a> [context](#requirement\_context) | >=0.4.0 |
-| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | ~> 0.95 |
+| <a name="requirement_snowflake"></a> [snowflake](#requirement\_snowflake) | >= 0.95 |
 
 ## Resources
 
